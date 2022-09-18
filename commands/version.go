@@ -8,7 +8,7 @@ import (
 )
 
 func NewVersionCmd(ec *cli.ExecutionContext) *cobra.Command {
-	versionCmd := &cobra.Command{
+	return &cobra.Command{
 		Use:          "version",
 		Short:        "Print the CLI version",
 		SilenceUsage: true,
@@ -35,5 +35,4 @@ func NewVersionCmd(ec *cli.ExecutionContext) *cobra.Command {
 			return nil
 		},
 	}
-	return versionCmd
 }
