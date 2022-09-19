@@ -13,8 +13,8 @@ import (
 func NewLsRemoteCmd(ec *cli.ExecutionContext) *cobra.Command {
 	return &cobra.Command{
 		Use:          "ls-remote",
-		Short:        "List of all available hasura-cli versions",
-		Long:         "List of all available hasura-cli versions",
+		Short:        "List remote versions",
+		Long:         "List remote versions",
 		SilenceUsage: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			ec.Viper = viper.New()
