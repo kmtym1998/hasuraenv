@@ -23,6 +23,7 @@ func init() {
 	ec := cli.NewExecutionContext()
 	rootCmd.AddCommand(
 		NewVersionCmd(ec),
+		NewLsRemoteCmd(ec),
 	)
 }
 
