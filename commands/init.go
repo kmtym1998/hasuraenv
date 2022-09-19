@@ -32,7 +32,7 @@ func NewInitCmd(ec *cli.ExecutionContext) *cobra.Command {
 			ec.Spinner.Stop()
 			ec.Logger.Info("✅", "Latest hasura cli has been installed")
 
-			if err := replaceSymlink(
+			if err := services.ReplaceSymlink(
 				ec.GlobalConfig.HasuraenvPath.VersionsDir+"/latest",
 				ec.GlobalConfig.HasuraenvPath.Current,
 			); err != nil {
@@ -50,9 +50,4 @@ func NewInitCmd(ec *cli.ExecutionContext) *cobra.Command {
 			return nil
 		},
 	}
-}
-
-func replaceSymlink(dest, src string) error {
-	os.Remove(src)
-	return os.Symlink(dest, src)
 }
