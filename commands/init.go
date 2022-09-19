@@ -19,14 +19,14 @@ func NewInitCmd(ec *cli.ExecutionContext) *cobra.Command {
 			return ec.Prepare()
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if err := os.MkdirAll(ec.GlobalConfig.HasuraenvPath.VersionsDir+"/latest", os.ModePerm); err != nil {
+			if err := os.MkdirAll(ec.GlobalConfig.HasuraenvPath.VersionsDir+"/default", os.ModePerm); err != nil {
 				return err
 			}
 			ec.Logger.Info("✅ ", ec.GlobalConfig.HasuraenvPath.VersionsDir, " has been created")
 
 			ec.Spin("Installing latest hasura cli... ")
 			if err := services.InstallHasuraCLI(services.InstallHasuraClIOptions{
-				Dir: ec.GlobalConfig.HasuraenvPath.VersionsDir + "/latest",
+				Dir: ec.GlobalConfig.HasuraenvPath.VersionsDir + "/default",
 			}); err != nil {
 				return err
 			}
@@ -34,7 +34,7 @@ func NewInitCmd(ec *cli.ExecutionContext) *cobra.Command {
 			ec.Logger.Info("✅ ", "Latest hasura cli has been installed")
 
 			if err := services.ReplaceSymlink(
-				ec.GlobalConfig.HasuraenvPath.VersionsDir+"/latest",
+				ec.GlobalConfig.HasuraenvPath.VersionsDir+"/default",
 				ec.GlobalConfig.HasuraenvPath.Current,
 			); err != nil {
 				return err
@@ -44,7 +44,7 @@ func NewInitCmd(ec *cli.ExecutionContext) *cobra.Command {
 				return []interface{}{
 					"✅ hasuraenv has been initialized!\n",
 					fmt.Sprintf("Run:\n     export PATH=%s:$PATH;\n     which hasura;\n", ec.GlobalConfig.HasuraenvPath.Current),
-					fmt.Sprintf("And check if your hasura command executes '%s/latest/hasura'", ec.GlobalConfig.HasuraenvPath.Current),
+					fmt.Sprintf("And check if your hasura command executes '%s/default/hasura'", ec.GlobalConfig.HasuraenvPath.Current),
 				}
 			})
 
