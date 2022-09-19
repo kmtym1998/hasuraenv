@@ -14,12 +14,13 @@ func NewInstallCmd(ec *cli.ExecutionContext) *cobra.Command {
 		Short:        "Download and install <version>",
 		SilenceUsage: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
+			// FIXME: args のバリデーション
 			return ec.Prepare()
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			installCmd := fmt.Sprintf(
 				"curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | INSTALL_PATH=%s VERSION=%s bash",
-				ec.GlobalConfig.HasuraenvPath+"/versions",
+				ec.GlobalConfig.HasuraenvPath.VersionsDir,
 				args[0],
 			)
 
@@ -28,8 +29,6 @@ func NewInstallCmd(ec *cli.ExecutionContext) *cobra.Command {
 			if err := exec.Command(installCmd).Run(); err != nil {
 				return err
 			}
-
-			ec.Logger.Info()
 
 			return nil
 		},
