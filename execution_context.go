@@ -45,6 +45,8 @@ type ExecutionContext struct {
 	GlobalConfig *GlobalConfig
 }
 
+var version string = "v0.0.1"
+
 func NewExecutionContext() *ExecutionContext {
 	ec := &ExecutionContext{
 		Stderr: os.Stderr,
@@ -142,7 +144,7 @@ func (ec *ExecutionContext) setupLogger() {
 	ec.Logger.AddHook(newSpinnerHandlerHook(ec.Logger, ec.Spinner, ec.IsTerminal, ec.NoColor))
 }
 
-// FIXME: いけてない
+// FIXME: いけてない。ldflags とかいうのを使いそう
 func (ec *ExecutionContext) setVersion() {
-	ec.Version = "v0.0.0"
+	ec.Version = version
 }
