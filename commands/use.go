@@ -25,6 +25,7 @@ func NewUseCmd(ec *cli.ExecutionContext) *cobra.Command {
 			// TODO: ローカルに存在するバージョンかどうか検証
 			// TODO: ローカルに存在しないバージョンだったらインストールするかどうか聞く
 			// NOTE: https://dev.to/divrhino/building-an-interactive-cli-app-with-go-cobra-promptui-346n
+			//       https://zenn.dev/ktechb/articles/golung-promptui
 
 			return services.ValidateSemVer(args[0])
 		},
