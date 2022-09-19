@@ -9,14 +9,15 @@ import (
 
 func NewVersionCmd(ec *cli.ExecutionContext) *cobra.Command {
 	return &cobra.Command{
-		Use:          "version",
-		Short:        "Print the CLI version",
-		SilenceUsage: true,
+		Use:           "version",
+		Short:         "Print the CLI version",
+		SilenceUsage:  true,
+		SilenceErrors: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			ec.Viper = viper.New()
 			return ec.Prepare()
 		},
-		RunE: func(cmd *cobra.Command, args []string) error {
+		Run: func(cmd *cobra.Command, args []string) {
 			logger := logrus.New()
 			logger.SetOutput(ec.Stdout)
 			logger.SetFormatter(&logrus.TextFormatter{DisableTimestamp: true, DisableColors: ec.NoColor})
@@ -32,7 +33,6 @@ func NewVersionCmd(ec *cli.ExecutionContext) *cobra.Command {
 			// 		WithField("version", ec.Version.GetServerVersion()).
 			// 		Info("hasura graphql engine")
 			// }
-			return nil
 		},
 	}
 }

@@ -12,10 +12,11 @@ import (
 
 func NewLsRemoteCmd(ec *cli.ExecutionContext) *cobra.Command {
 	return &cobra.Command{
-		Use:          "ls-remote",
-		Short:        "List remote versions",
-		Long:         "List remote versions",
-		SilenceUsage: true,
+		Use:           "ls-remote",
+		Short:         "List remote versions",
+		Long:          "List remote versions",
+		SilenceUsage:  true,
+		SilenceErrors: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			ec.Viper = viper.New()
 			return ec.Prepare()
