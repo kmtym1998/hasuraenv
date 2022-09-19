@@ -22,6 +22,8 @@ func NewInstallCmd(ec *cli.ExecutionContext) *cobra.Command {
 				return errors.New("no version specified")
 			}
 
+			// TODO: 存在するバージョンかどうかの検証
+
 			return services.ValidateSemVer(args[0])
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
