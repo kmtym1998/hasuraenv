@@ -27,6 +27,7 @@ func init() {
 		NewLsRemoteCmd(ec),
 		NewLsCmd(ec),
 		NewInstallCmd(ec),
+		NewUseCmd(ec),
 	)
 }
 
