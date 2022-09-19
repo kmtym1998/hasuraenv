@@ -3,9 +3,7 @@ package commands
 import (
 	"errors"
 	"fmt"
-	"strings"
 
-	"github.com/blang/semver/v4"
 	cli "github.com/kmtym1998/hasuraenv"
 	"github.com/kmtym1998/hasuraenv/internal/services"
 	"github.com/spf13/cobra"
@@ -24,12 +22,7 @@ func NewInstallCmd(ec *cli.ExecutionContext) *cobra.Command {
 				return errors.New("no version specified")
 			}
 
-			version := strings.Replace(args[0], "v", "", 1)
-			if _, err := semver.Make(version); err != nil {
-				return err
-			}
-
-			return nil
+			return services.ValidateSemVer(args[0])
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ec.Spin(fmt.Sprintf("Installing hasura-cli %s... ", args[0]))
