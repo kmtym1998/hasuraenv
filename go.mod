@@ -3,6 +3,7 @@ module github.com/kmtym1998/hasuraenv
 go 1.19
 
 require (
+	github.com/blang/semver/v4 v4.0.0
 	github.com/briandowns/spinner v1.19.0
 	github.com/gofrs/uuid v4.3.0+incompatible
 	github.com/mattn/go-colorable v0.1.12
