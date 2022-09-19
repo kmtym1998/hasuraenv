@@ -24,6 +24,7 @@ func init() {
 	rootCmd.AddCommand(
 		NewVersionCmd(ec),
 		NewLsRemoteCmd(ec),
+		NewInstallCmd(ec),
 	)
 }
 

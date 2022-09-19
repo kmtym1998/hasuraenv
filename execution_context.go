@@ -41,6 +41,8 @@ type ExecutionContext struct {
 
 	// Viper indicates the viper object for the execution
 	Viper *viper.Viper
+
+	GlobalConfig *GlobalConfig
 }
 
 func NewExecutionContext() *ExecutionContext {
@@ -75,10 +77,7 @@ func (ec *ExecutionContext) Prepare() error {
 	ec.setVersion()
 
 	// setup global config
-	// err := ec.setupGlobalConfig()
-	// if err != nil {
-	// 	return fmt.Errorf("setting up global config failed: %w", err)
-	// }
+	ec.setupGlobalConfig()
 
 	// generate an execution id
 	if ec.ID == "" {
@@ -94,6 +93,11 @@ func (ec *ExecutionContext) Prepare() error {
 	}
 
 	return nil
+}
+
+// setupGlobalConfig creates global config
+func (ec *ExecutionContext) setupGlobalConfig() {
+	ec.GlobalConfig = newGlobalConfig()
 }
 
 // setupSpinner creates a default spinner if the context does not already have
