@@ -2,8 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"os"
-	"strings"
 
 	"github.com/blang/semver/v4"
 	cli "github.com/kmtym1998/hasuraenv"
@@ -26,30 +24,12 @@ func NewLsCmd(ec *cli.ExecutionContext) *cobra.Command {
 			return ec.Prepare()
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			dirEntries, err := os.ReadDir(ec.GlobalConfig.HasuraenvPath.VersionsDir)
+			versions, err := services.ListInstalledVersions(
+				ec.GlobalConfig.HasuraenvPath.VersionsDir,
+				ec.Logger,
+			)
 			if err != nil {
 				return err
-			}
-
-			var versions []semver.Version
-			for _, entry := range dirEntries {
-				if !entry.IsDir() {
-					continue
-				}
-
-				if err := services.ValidateSemVer(entry.Name()); err != nil {
-					if entry.Name() != "default" {
-						ec.Logger.Warnf("Unexpected version: %s", entry.Name())
-					}
-					continue
-				}
-
-				sv, err := semver.Parse(strings.Replace(entry.Name(), "v", "", 1))
-				if err != nil {
-					return err
-				}
-
-				versions = append(versions, sv)
 			}
 
 			semver.Sort(versions)

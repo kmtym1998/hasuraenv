@@ -15,7 +15,6 @@ func NewInitCmd(ec *cli.ExecutionContext) *cobra.Command {
 		Short:        "initialize hasuraenv",
 		SilenceUsage: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			// TODO: すでに initialize されてそうかチェック
 			return ec.Prepare()
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {

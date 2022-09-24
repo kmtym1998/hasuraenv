@@ -13,7 +13,7 @@ import (
 
 // https://docs.github.com/ja/rest/releases/releases#list-releases
 
-const GITHUB_ENDPOINT_GET_RELEASE_BY_TAG_NAME string = "https://api.github.com/repos/hasura/graphql-engine/%s"
+const GITHUB_ENDPOINT_GET_RELEASE_BY_TAG_NAME string = "https://api.github.com/repos/hasura/graphql-engine/releases/tags/%s"
 
 func GetReleaseByTagName(tag string) (*model.GitHubRelease, error) {
 	u, _ := url.Parse(fmt.Sprintf(GITHUB_ENDPOINT_GET_RELEASE_BY_TAG_NAME, tag))

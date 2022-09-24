@@ -6,6 +6,7 @@ require (
 	github.com/blang/semver/v4 v4.0.0
 	github.com/briandowns/spinner v1.19.0
 	github.com/gofrs/uuid v4.3.0+incompatible
+	github.com/manifoldco/promptui v0.9.0
 	github.com/mattn/go-colorable v0.1.12
 	github.com/samber/lo v1.28.2
 	github.com/sirupsen/logrus v1.9.0
@@ -15,6 +16,7 @@ require (
 )
 
 require (
+	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
