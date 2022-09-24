@@ -1,10 +1,14 @@
 package commands
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
+	"github.com/blang/semver/v4"
 	cli "github.com/kmtym1998/hasuraenv"
 	"github.com/kmtym1998/hasuraenv/internal/services"
+	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -27,7 +31,7 @@ func NewLsCmd(ec *cli.ExecutionContext) *cobra.Command {
 				return err
 			}
 
-			var versions []interface{}
+			var versions []semver.Version
 			for _, entry := range dirEntries {
 				if !entry.IsDir() {
 					continue
@@ -40,12 +44,24 @@ func NewLsCmd(ec *cli.ExecutionContext) *cobra.Command {
 					continue
 				}
 
-				versions = append(versions, "\n     "+entry.Name())
+				sv, err := semver.Parse(strings.Replace(entry.Name(), "v", "", 1))
+				if err != nil {
+					return err
+				}
+
+				versions = append(versions, sv)
 			}
+
+			semver.Sort(versions)
 
 			ec.Logger.InfoFn(func() []interface{} {
 				messages := []interface{}{"Installed hasura cli"}
-				return append(messages, versions...)
+				return append(
+					messages,
+					lo.Map(versions, func(v semver.Version, _ int) any {
+						return fmt.Sprint("\n    " + v.String())
+					})...,
+				)
 			})
 
 			return nil
