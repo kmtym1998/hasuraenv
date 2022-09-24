@@ -7,7 +7,7 @@ CLI to manage multiple hasura-cli versions.
 ```sh
 $ go install github.com/kmtym1998/hasuraenv/cmd/hasuraenv@latest
 $ hasuraenv init
-$ export PATH=/Users/kmtym1998/.hasuraenv/current:$PATH;
+$ export PATH=~/.hasuraenv/current:$PATH;
 ```
 
 ## Usage
