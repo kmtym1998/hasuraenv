@@ -45,7 +45,7 @@ type ExecutionContext struct {
 	GlobalConfig *GlobalConfig
 }
 
-var version string = "v0.0.1"
+var version string = "v0.0.2"
 
 func NewExecutionContext() *ExecutionContext {
 	ec := &ExecutionContext{
