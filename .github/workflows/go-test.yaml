@@ -1,4 +1,4 @@
-name: Test Hasura
+name: Exec go test
 
 on:
   workflow_call:
@@ -20,14 +20,14 @@ jobs:
         with:
           go-version: 1.19
 
-      - name: Build CLI
-        run: go build -o ./hasuraenv cmd/hasuraenv/hasuraenv.go
+      - name: Minimize Module
+        run: |-
+          go mod tidy
+          git diff --exit-code
 
-      - name: init hasuraenv
-        run: ./hasuraenv init
+      - name: Format Check
+        run: |-
+          go fmt ./...
+          git diff --exit-code
 
-      - name: Add Path
-        run: export PATH=~/.hasuraenv/current:$PATH;
-
-      - name: Use hasura-cli
-        run: hasura version
+      # TODO; lint
