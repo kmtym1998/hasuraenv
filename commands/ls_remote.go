@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"fmt"
+
 	cli "github.com/kmtym1998/hasuraenv"
 	"github.com/kmtym1998/hasuraenv/internal/model"
 	"github.com/kmtym1998/hasuraenv/internal/services"
@@ -10,7 +12,7 @@ import (
 )
 
 func NewLsRemoteCmd(ec *cli.ExecutionContext) *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:           "ls-remote",
 		Short:         "List remote versions",
 		Long:          "List remote versions",
@@ -21,14 +23,18 @@ func NewLsRemoteCmd(ec *cli.ExecutionContext) *cobra.Command {
 			return ec.Prepare()
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			releases, err := services.ListHasuraReleases()
+			limit, err := cmd.Flags().GetInt("limit")
+			if err != nil {
+				return err
+			}
+
+			releases, err := services.ListHasuraReleases(limit)
 			if err != nil {
 				return err
 			}
 
 			ec.Logger.InfoFn(func() []interface{} {
-				// FIXME: 全部のリリース取得する できたら limit オブション渡せるようにする
-				messages := []interface{}{"Latest 30 releases"}
+				messages := []interface{}{fmt.Sprintf("Latest %d releases", limit)}
 				versions := lo.Map(releases, func(r model.GitHubRelease, _ int) interface{} {
 					return "\n     " + r.TagName
 				})
@@ -39,4 +45,8 @@ func NewLsRemoteCmd(ec *cli.ExecutionContext) *cobra.Command {
 			return nil
 		},
 	}
+
+	cmd.Flags().Int("limit", 30, "Maximum number of releases to fetch")
+
+	return cmd
 }
