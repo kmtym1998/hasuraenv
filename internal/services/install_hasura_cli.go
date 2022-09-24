@@ -18,24 +18,26 @@ func InstallHasuraCLI(opt InstallHasuraClIOptions) error {
 		return err
 	}
 
-	if err := os.WriteFile("tmp.sh", installScript, os.ModePerm); err != nil {
+	const tmpFileName = "tmp_hasuraenv_install_script.sh"
+
+	if err := os.WriteFile(tmpFileName, installScript, os.ModePerm); err != nil {
 		return err
 	}
 
-	INSTALL_PATH := os.Getenv("INSTALL_PATH")
-	VERSION := os.Getenv("VERSION")
+	installPath := os.Getenv("INSTALL_PATH")
+	version := os.Getenv("VERSION")
 
 	os.Setenv("INSTALL_PATH", opt.Dir)
 	os.Setenv("VERSION", opt.Version)
 
-	if _, err := exec.Command("bash", "tmp.sh").Output(); err != nil {
+	if _, err := exec.Command("bash", tmpFileName).Output(); err != nil {
 		return err
 	}
 
-	os.Setenv("INSTALL_PATH", INSTALL_PATH)
-	os.Setenv("VERSION", VERSION)
+	os.Setenv("INSTALL_PATH", installPath)
+	os.Setenv("VERSION", version)
 
-	if err := os.Remove("tmp.sh"); err != nil {
+	if err := os.Remove(tmpFileName); err != nil {
 		return err
 	}
 

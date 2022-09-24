@@ -22,15 +22,30 @@ func NewInstallCmd(ec *cli.ExecutionContext) *cobra.Command {
 				return errors.New("no version specified")
 			}
 
-			// TODO: 存在するバージョンかどうかの検証
+			version := args[0]
 
-			return services.ValidateSemVer(args[0])
+			if err := services.ValidateSemVer(version); err != nil {
+				return err
+			}
+
+			release, err := services.GetReleaseByTagName(version)
+			if err != nil {
+				return err
+			}
+
+			if release == nil {
+				return fmt.Errorf("%s does not exist", version)
+			}
+
+			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			ec.Spin(fmt.Sprintf("Installing hasura-cli %s... ", args[0]))
+			version := args[0]
+
+			ec.Spin(fmt.Sprintf("Installing hasura-cli %s... ", version))
 			services.InstallHasuraCLI(services.InstallHasuraClIOptions{
-				Dir:     ec.GlobalConfig.HasuraenvPath.VersionsDir + "/" + args[0],
-				Version: args[0],
+				Dir:     ec.GlobalConfig.HasuraenvPath.VersionsDir + "/" + version,
+				Version: version,
 			})
 
 			ec.Spinner.Stop()
