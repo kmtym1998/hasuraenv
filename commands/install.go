@@ -28,7 +28,7 @@ func NewInstallCmd(ec *cli.ExecutionContext) *cobra.Command {
 				return err
 			}
 
-			release, err := services.GetReleaseByTagName(version)
+			release, err := services.GetReleaseByTagName("hasura", "graphql-engine", version)
 			if err != nil {
 				return err
 			}
