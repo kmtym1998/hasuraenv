@@ -20,6 +20,7 @@ func NewLsRemoteCmd(ec *cli.ExecutionContext) *cobra.Command {
 		SilenceErrors: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			ec.Viper = viper.New()
+
 			return ec.Prepare()
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {

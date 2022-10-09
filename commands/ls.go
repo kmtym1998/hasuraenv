@@ -21,6 +21,7 @@ func NewLsCmd(ec *cli.ExecutionContext) *cobra.Command {
 		SilenceErrors: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			ec.Viper = viper.New()
+
 			return ec.Prepare()
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -36,6 +37,7 @@ func NewLsCmd(ec *cli.ExecutionContext) *cobra.Command {
 
 			ec.Logger.InfoFn(func() []interface{} {
 				messages := []interface{}{"Installed hasura cli"}
+
 				return append(
 					messages,
 					lo.Map(versions, func(v semver.Version, _ int) any {

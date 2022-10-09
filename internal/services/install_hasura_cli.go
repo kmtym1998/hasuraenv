@@ -27,15 +27,23 @@ func InstallHasuraCLI(opt InstallHasuraClIOptions) error {
 	installPath := os.Getenv("INSTALL_PATH")
 	version := os.Getenv("VERSION")
 
-	os.Setenv("INSTALL_PATH", opt.Dir)
-	os.Setenv("VERSION", opt.Version)
+	if err := os.Setenv("INSTALL_PATH", opt.Dir); err != nil {
+		return err
+	}
+	if err := os.Setenv("VERSION", opt.Version); err != nil {
+		return err
+	}
 
 	if _, err := exec.Command("bash", tmpFileName).Output(); err != nil {
 		return err
 	}
 
-	os.Setenv("INSTALL_PATH", installPath)
-	os.Setenv("VERSION", version)
+	if err := os.Setenv("INSTALL_PATH", installPath); err != nil {
+		return err
+	}
+	if err := os.Setenv("VERSION", version); err != nil {
+		return err
+	}
 
 	if err := os.Remove(tmpFileName); err != nil {
 		return err

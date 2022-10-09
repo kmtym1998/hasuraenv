@@ -8,8 +8,7 @@ import (
 
 // main is the entrypoint function
 func main() {
-	err := commands.Execute()
-	if err != nil {
+	if err := commands.Execute(); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -21,7 +21,9 @@ func NewUseCmd(ec *cli.ExecutionContext) *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			ec.Prepare()
+			if err := ec.Prepare(); err != nil {
+				return err
+			}
 
 			if len(args) == 0 {
 				return errors.New("no version specified")

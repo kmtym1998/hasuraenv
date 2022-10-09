@@ -15,6 +15,7 @@ func NewVersionCmd(ec *cli.ExecutionContext) *cobra.Command {
 		SilenceErrors: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			ec.Viper = viper.New()
+
 			return ec.Prepare()
 		},
 		Run: func(cmd *cobra.Command, args []string) {
@@ -26,13 +27,6 @@ func NewVersionCmd(ec *cli.ExecutionContext) *cobra.Command {
 			}
 
 			logger.WithField("version", ec.Version).Info("hasuraenv")
-			// err := ec.Validate()
-			// if err == nil {
-			// 	logger.
-			// 		WithField("endpoint", ec.Config.ServerConfig.Endpoint).
-			// 		WithField("version", ec.Version.GetServerVersion()).
-			// 		Info("hasura graphql engine")
-			// }
 		},
 	}
 }

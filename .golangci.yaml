@@ -1,0 +1,55 @@
+# https://golangci-lint.run/usage/configuration/#config-file
+run:
+  go: '1.19'
+  timeout: 1m
+
+issues:
+  exclude-use-default: false
+  exclude-rules:
+    - path: internal/services/replace_symlink.go
+      linters:
+        - gosec
+    - path: commands/root.go
+      linters:
+        - gochecknoglobals
+
+linters:
+  enable:
+    - errorlint
+    - exhaustive
+    - exportloopref
+    - forcetypeassert
+    - gochecknoglobals
+    - goconst
+    - gocritic
+    - gosec
+    - makezero
+    - misspell
+    - nakedret
+    - nestif
+    - nlreturn
+    - nolintlint
+    - paralleltest
+    - prealloc
+    - predeclared
+    - whitespace
+  disable:
+    # deprecated
+    - errcheck
+    - golint
+    - exhaustivestruct
+    - scopelint
+    - interfacer
+    - maligned
+
+    # > You can track the evolution of the go1.18 support by following the https://github.com/golangci/golangci-lint/issues/2649.
+    - structcheck
+    - bodyclose
+    - contextcheck
+    - nilerr
+    - noctx
+    - rowserrcheck
+    - sqlclosecheck
+    - tparallel
+    - unparam
+    - wastedassign

@@ -135,6 +135,7 @@ func (ec *ExecutionContext) setupLogger() {
 		level, err := logrus.ParseLevel(ec.LogLevel)
 		if err != nil {
 			ec.Logger.WithError(err).Error("error parsing log-level flag")
+
 			return
 		}
 		ec.Logger.SetLevel(level)

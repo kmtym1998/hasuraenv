@@ -16,27 +16,33 @@ type spinnerHook struct {
 func newSpinnerHandlerHook(parent *logrus.Logger, spinner *spinner.Spinner, isTerminal, noColor bool) *spinnerHook {
 	logger := logrus.New()
 	logger.Out = parent.Out
-	if parent.Out != io.Discard {
-		if isTerminal {
-			if noColor {
-				logger.Formatter = &logrus.TextFormatter{
-					DisableColors:    true,
-					DisableTimestamp: true,
-				}
-			} else {
-				logger.Formatter = &logrus.TextFormatter{
-					ForceColors:      true,
-					DisableTimestamp: true,
-				}
+	if parent.Out == io.Discard {
+		return &spinnerHook{
+			logger:  logger,
+			spinner: spinner,
+		}
+	}
+
+	if isTerminal {
+		if noColor {
+			logger.Formatter = &logrus.TextFormatter{
+				DisableColors:    true,
+				DisableTimestamp: true,
 			}
-			logger.Out = colorable.NewColorableStderr()
 		} else {
-			logger.Formatter = &logrus.JSONFormatter{
-				PrettyPrint: false,
+			logger.Formatter = &logrus.TextFormatter{
+				ForceColors:      true,
+				DisableTimestamp: true,
 			}
 		}
-		logger.Level = parent.GetLevel()
+		logger.Out = colorable.NewColorableStderr()
+	} else {
+		logger.Formatter = &logrus.JSONFormatter{
+			PrettyPrint: false,
+		}
 	}
+	logger.Level = parent.GetLevel()
+
 	return &spinnerHook{
 		logger:  logger,
 		spinner: spinner,
@@ -57,5 +63,6 @@ func (hook *spinnerHook) Fire(entry *logrus.Entry) error {
 		}()
 	}
 	entry.Logger = hook.logger
+
 	return nil
 }

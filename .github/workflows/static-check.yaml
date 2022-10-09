@@ -1,4 +1,4 @@
-name: Exec go test
+name: Static Check
 
 on:
   workflow_call:
@@ -8,15 +8,13 @@ on:
       - synchronize
 
 jobs:
-  test:
+  format-check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Setup Go
-        uses: actions/setup-go@v2
+      - uses: actions/setup-go@v2
         with:
           go-version: 1.19
 
@@ -30,4 +28,17 @@ jobs:
           go fmt ./...
           git diff --exit-code
 
-      # TODO; lint
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - uses: actions/checkout@v3
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.49
