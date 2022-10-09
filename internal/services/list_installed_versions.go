@@ -14,7 +14,7 @@ func ListInstalledVersions(versionsDir string, logger *logrus.Logger) ([]semver.
 		return nil, err
 	}
 
-	var versions []semver.Version
+	versions := []semver.Version{}
 	for _, entry := range dirEntries {
 		if !entry.IsDir() {
 			continue
@@ -24,6 +24,7 @@ func ListInstalledVersions(versionsDir string, logger *logrus.Logger) ([]semver.
 			if entry.Name() != "default" {
 				logger.Warnf("Unexpected version: %s", entry.Name())
 			}
+
 			continue
 		}
 

@@ -16,7 +16,9 @@ func NewInstallCmd(ec *cli.ExecutionContext) *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			ec.Prepare()
+			if err := ec.Prepare(); err != nil {
+				return err
+			}
 
 			if len(args) == 0 {
 				return errors.New("no version specified")
@@ -28,7 +30,7 @@ func NewInstallCmd(ec *cli.ExecutionContext) *cobra.Command {
 				return err
 			}
 
-			release, err := services.GetReleaseByTagName(version)
+			release, err := services.GetReleaseByTagName("hasura", "graphql-engine", version)
 			if err != nil {
 				return err
 			}
@@ -43,10 +45,12 @@ func NewInstallCmd(ec *cli.ExecutionContext) *cobra.Command {
 			version := args[0]
 
 			ec.Spin(fmt.Sprintf("Installing hasura-cli %s... ", version))
-			services.InstallHasuraCLI(services.InstallHasuraClIOptions{
+			if err := services.InstallHasuraCLI(services.InstallHasuraClIOptions{
 				Dir:     ec.GlobalConfig.HasuraenvPath.VersionsDir + "/" + version,
 				Version: version,
-			})
+			}); err != nil {
+				return err
+			}
 
 			ec.Spinner.Stop()
 

@@ -13,6 +13,7 @@ type ConfigPath struct {
 
 func newGlobalConfig() *GlobalConfig {
 	configPathBase := os.Getenv("HOME") + "/.hasuraenv"
+
 	return &GlobalConfig{
 		HasuraenvPath: ConfigPath{
 			VersionsDir: configPathBase + "/versions",
