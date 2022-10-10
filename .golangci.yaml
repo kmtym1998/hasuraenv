@@ -12,6 +12,9 @@ issues:
     - path: commands/root.go
       linters:
         - gochecknoglobals
+    - path: e2e
+      linters:
+        - gosec
 
 linters:
   enable:
