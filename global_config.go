@@ -1,7 +1,5 @@
 package cli
 
-import "os"
-
 type GlobalConfig struct {
 	HasuraenvPath ConfigPath
 }
@@ -11,9 +9,7 @@ type ConfigPath struct {
 	Current     string
 }
 
-func newGlobalConfig() *GlobalConfig {
-	configPathBase := os.Getenv("HOME") + "/.hasuraenv"
-
+func newGlobalConfig(configPathBase string) *GlobalConfig {
 	return &GlobalConfig{
 		HasuraenvPath: ConfigPath{
 			VersionsDir: configPathBase + "/versions",

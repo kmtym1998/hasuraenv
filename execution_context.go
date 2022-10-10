@@ -42,15 +42,17 @@ type ExecutionContext struct {
 	// Viper indicates the viper object for the execution
 	Viper *viper.Viper
 
-	GlobalConfig *GlobalConfig
+	configPathBase string
+	GlobalConfig   *GlobalConfig
 }
 
 var version string = "v0.0.2"
 
-func NewExecutionContext() *ExecutionContext {
+func NewExecutionContext(configPathBase string) *ExecutionContext {
 	ec := &ExecutionContext{
-		Stderr: os.Stderr,
-		Stdout: os.Stdout,
+		configPathBase: configPathBase,
+		Stderr:         os.Stderr,
+		Stdout:         os.Stdout,
 	}
 
 	return ec
@@ -99,7 +101,7 @@ func (ec *ExecutionContext) Prepare() error {
 
 // setupGlobalConfig creates global config
 func (ec *ExecutionContext) setupGlobalConfig() {
-	ec.GlobalConfig = newGlobalConfig()
+	ec.GlobalConfig = newGlobalConfig(ec.configPathBase)
 }
 
 // setupSpinner creates a default spinner if the context does not already have

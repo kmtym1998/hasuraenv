@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"os"
 
 	cli "github.com/kmtym1998/hasuraenv"
 
@@ -20,7 +21,9 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	ec := cli.NewExecutionContext()
+	configPathBase := os.Getenv("HOME") + "/.hasuraenv"
+
+	ec := cli.NewExecutionContext(configPathBase)
 	rootCmd.AddCommand(
 		NewVersionCmd(ec),
 		NewInitCmd(ec),
