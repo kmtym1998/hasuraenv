@@ -10,7 +10,9 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func Test1(t *testing.T) {
+func TestVersion(t *testing.T) {
+	t.Parallel()
+
 	expected, err := os.ReadFile("goldenFiles/version/01.json")
 	if err != nil {
 		t.Fatal(err)
@@ -26,5 +28,5 @@ func Test1(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	jsonEq(t, expected, actual)
+	jsonEq(t, expected, actual, "time")
 }

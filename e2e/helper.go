@@ -64,7 +64,7 @@ type tHelper interface {
 	Helper()
 }
 
-func jsonEq(t assert.TestingT, expected, actual []byte, msgAndArgs ...interface{}) bool {
+func jsonEq(t assert.TestingT, expected, actual []byte, ignoreKeys ...string) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
 	}
@@ -72,15 +72,17 @@ func jsonEq(t assert.TestingT, expected, actual []byte, msgAndArgs ...interface{
 	var expectedJSONAsMap, actualJSONAsMap map[string]any
 
 	if err := json.Unmarshal([]byte(expected), &expectedJSONAsMap); err != nil {
-		return assert.Fail(t, fmt.Sprintf("Expected value ('%s') is not valid json.\nJSON parsing error: '%s'", expected, err.Error()), msgAndArgs...)
+		return assert.Fail(t, fmt.Sprintf("Expected value ('%s') is not valid json.\nJSON parsing error: '%s'", expected, err.Error()))
 	}
 
 	if err := json.Unmarshal([]byte(actual), &actualJSONAsMap); err != nil {
-		return assert.Fail(t, fmt.Sprintf("Input ('%s') needs to be valid json.\nJSON parsing error: '%s'", actual, err.Error()), msgAndArgs...)
+		return assert.Fail(t, fmt.Sprintf("Input ('%s') needs to be valid json.\nJSON parsing error: '%s'", actual, err.Error()))
 	}
 
-	delete(expectedJSONAsMap, "time")
-	delete(actualJSONAsMap, "time")
+	for _, k := range ignoreKeys {
+		delete(expectedJSONAsMap, k)
+		delete(actualJSONAsMap, k)
+	}
 
 	expectedJSONAsBytes, err := json.Marshal(expectedJSONAsMap)
 	if err != nil {
@@ -97,5 +99,5 @@ func jsonEq(t assert.TestingT, expected, actual []byte, msgAndArgs ...interface{
 	json.Unmarshal(expectedJSONAsBytes, &expectedJSONAsAny)
 	json.Unmarshal(actualJSONAsBytes, &actualJSONAsAny)
 
-	return assert.Equal(t, expectedJSONAsAny, actualJSONAsAny, msgAndArgs...)
+	return assert.Equal(t, expectedJSONAsAny, actualJSONAsAny)
 }
