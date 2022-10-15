@@ -46,13 +46,12 @@ type ExecutionContext struct {
 	GlobalConfig   *GlobalConfig
 }
 
-var version string = "v0.0.2"
-
-func NewExecutionContext(configPathBase string) *ExecutionContext {
+func NewExecutionContext(bo BuildOptions) *ExecutionContext {
 	ec := &ExecutionContext{
-		configPathBase: configPathBase,
+		Version:        bo.Version,
 		Stderr:         os.Stderr,
 		Stdout:         os.Stdout,
+		configPathBase: bo.ConfigPathBase,
 	}
 
 	return ec
@@ -76,9 +75,6 @@ func (ec *ExecutionContext) Prepare() error {
 
 	// set logger
 	ec.setupLogger()
-
-	// populate version
-	ec.setVersion()
 
 	// setup global config
 	ec.setupGlobalConfig()
@@ -145,9 +141,4 @@ func (ec *ExecutionContext) setupLogger() {
 
 	ec.Logger.Hooks = make(logrus.LevelHooks)
 	ec.Logger.AddHook(newSpinnerHandlerHook(ec.Logger, ec.Spinner, ec.IsTerminal, ec.NoColor))
-}
-
-// FIXME: いけてない。ldflags とかいうのを使いそう
-func (ec *ExecutionContext) setVersion() {
-	ec.Version = version
 }

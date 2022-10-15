@@ -9,7 +9,7 @@ issues:
     - path: internal/services/replace_symlink.go
       linters:
         - gosec
-    - path: commands/root.go
+    - path: cmd/hasuraenv/hasuraenv.go
       linters:
         - gochecknoglobals
     - path: e2e
