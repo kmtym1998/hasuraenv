@@ -5,7 +5,7 @@ build:
 
 build-for-e2e-test:
 	go build \
-		-o ${HASURAENV_TEST_CLI_PATH} \
+		-o e2e/${HASURAENV_TEST_CLI_PATH} \
 		-ldflags '-X main.configPathBase=tmp/test/.hasuraenv -X main.version=e2e' \
 		cmd/hasuraenv/hasuraenv.go
 
