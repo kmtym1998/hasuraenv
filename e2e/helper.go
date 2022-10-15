@@ -47,9 +47,9 @@ func buildTempFilePath(t *testing.T) string {
 	return fmt.Sprintf("%s/%s.txt", t.TempDir(), uuid.New().String())
 }
 
-func execSubCommand(tempFilePath string, arg ...string) error {
+func writeOutput(outputPath string, commandArg ...string) error {
 	command := fmt.Sprintf("%s %s > %s",
-		hasuraenvBinPath(), strings.Join(arg, " "), tempFilePath,
+		hasuraenvBinPath(), strings.Join(commandArg, " "), outputPath,
 	)
 
 	println(command)

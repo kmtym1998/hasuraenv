@@ -2,8 +2,6 @@
 package main
 
 import (
-	"os"
-
 	cli "github.com/kmtym1998/hasuraenv"
 	"github.com/kmtym1998/hasuraenv/commands"
 	log "github.com/sirupsen/logrus"
@@ -11,7 +9,7 @@ import (
 
 var (
 	version        string = "v0.0.2"
-	configPathBase string = os.Getenv("HOME") + "/.hasuraenv"
+	configPathBase string = "~/.hasuraenv"
 )
 
 // main is the entrypoint function
