@@ -19,7 +19,7 @@ func TestVersion(t *testing.T) {
 	}
 
 	tempFilePath := buildTempFilePath(t)
-	if err := execSubCommand(tempFilePath, "version"); err != nil {
+	if err := writeOutput(tempFilePath, "version"); err != nil {
 		t.Fatal(err)
 	}
 
