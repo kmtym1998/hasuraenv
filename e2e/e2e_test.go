@@ -1,10 +1,14 @@
 package e2e
 
 import (
+	"encoding/json"
 	"os"
 	"os/exec"
+	"strconv"
+	"strings"
 	"testing"
 
+	"github.com/blang/semver/v4"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 )
@@ -73,5 +77,110 @@ func TestInit(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.Equal(t, expected, actual)
+	})
+}
+
+func TestLsRemote(t *testing.T) {
+	t.Parallel()
+
+	t.Run("expect 30 releases on list when not specifying limit", func(t *testing.T) {
+		t.Parallel()
+
+		tempFilePath := buildTempFilePath(t)
+		if err := writeOutput(tempFilePath, "ls-remote"); err != nil {
+			t.Fatal(err)
+		}
+
+		b, err := os.ReadFile(tempFilePath)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var output map[string]string
+		if err := json.Unmarshal(b, &output); err != nil {
+			t.Fatalf("error: %+v data: %s", err, string(b))
+		}
+
+		messages := strings.Split(output["msg"], "\n")
+		versions := lo.Filter(messages, func(m string, _ int) bool {
+			sv := strings.ReplaceAll(m, " ", "")
+			sv = strings.Replace(sv, "v", "", 1)
+			if _, err := semver.Make(sv); err != nil {
+				return false
+			}
+
+			return true
+		})
+
+		assert.Equal(t, "Latest 30 releases", messages[0])
+		assert.Len(t, versions, 30)
+	})
+
+	t.Run("expect 10 releases on list when specifying limit as 10", func(t *testing.T) {
+		t.Parallel()
+
+		limit := 10
+		tempFilePath := buildTempFilePath(t)
+		if err := writeOutput(tempFilePath, "ls-remote", "--limit", strconv.Itoa(limit)); err != nil {
+			t.Fatal(err)
+		}
+
+		b, err := os.ReadFile(tempFilePath)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var output map[string]string
+		if err := json.Unmarshal(b, &output); err != nil {
+			t.Fatalf("error: %+v data: %s", err, string(b))
+		}
+
+		messages := strings.Split(output["msg"], "\n")
+		versions := lo.Filter(messages, func(m string, _ int) bool {
+			sv := strings.ReplaceAll(m, " ", "")
+			sv = strings.Replace(sv, "v", "", 1)
+			if _, err := semver.Make(sv); err != nil {
+				return false
+			}
+
+			return true
+		})
+
+		assert.Equal(t, "Latest "+strconv.Itoa(limit)+" releases", messages[0])
+		assert.Len(t, versions, limit)
+	})
+
+	t.Run("expect 110 releases on list when specifying limit as 110", func(t *testing.T) {
+		t.Parallel()
+
+		limit := 110
+		tempFilePath := buildTempFilePath(t)
+		if err := writeOutput(tempFilePath, "ls-remote", "--limit", strconv.Itoa(limit)); err != nil {
+			t.Fatal(err)
+		}
+
+		b, err := os.ReadFile(tempFilePath)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var output map[string]string
+		if err := json.Unmarshal(b, &output); err != nil {
+			t.Fatalf("error: %+v data: %s", err, string(b))
+		}
+
+		messages := strings.Split(output["msg"], "\n")
+		versions := lo.Filter(messages, func(m string, _ int) bool {
+			sv := strings.ReplaceAll(m, " ", "")
+			sv = strings.Replace(sv, "v", "", 1)
+			if _, err := semver.Make(sv); err != nil {
+				return false
+			}
+
+			return true
+		})
+
+		assert.Equal(t, "Latest "+strconv.Itoa(limit)+" releases", messages[0])
+		assert.Len(t, versions, limit)
 	})
 }
