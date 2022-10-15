@@ -84,6 +84,8 @@ func TestLsRemote(t *testing.T) {
 	t.Parallel()
 
 	t.Run("expect 30 releases on list when not specifying limit", func(t *testing.T) {
+		t.Parallel()
+
 		tempFilePath := buildTempFilePath(t)
 		if err := writeOutput(tempFilePath, "ls-remote"); err != nil {
 			t.Fatal(err)
@@ -115,6 +117,8 @@ func TestLsRemote(t *testing.T) {
 	})
 
 	t.Run("expect 10 releases on list when specifying limit as 10", func(t *testing.T) {
+		t.Parallel()
+
 		limit := 10
 		tempFilePath := buildTempFilePath(t)
 		if err := writeOutput(tempFilePath, "ls-remote", "--limit", strconv.Itoa(limit)); err != nil {
@@ -147,6 +151,8 @@ func TestLsRemote(t *testing.T) {
 	})
 
 	t.Run("expect 110 releases on list when specifying limit as 110", func(t *testing.T) {
+		t.Parallel()
+
 		limit := 110
 		tempFilePath := buildTempFilePath(t)
 		if err := writeOutput(tempFilePath, "ls-remote", "--limit", strconv.Itoa(limit)); err != nil {
