@@ -1,7 +1,10 @@
 HASURAENV_TEST_CLI_PATH:=tmp/test/bin/hasuraenv
 
 build:
-	go build -o tmp/bin/hasuraenv cmd/hasuraenv/hasuraenv.go
+	go build \
+		-o tmp/bin/hasuraenv \
+		-ldflags '-X main.configPathBase=${HOME}/.hasuraenv' \
+		cmd/hasuraenv/hasuraenv.go
 
 build-for-e2e-test:
 	go build \

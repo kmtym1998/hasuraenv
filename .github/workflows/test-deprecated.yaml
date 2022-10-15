@@ -21,7 +21,7 @@ jobs:
           go-version: 1.19
 
       - name: Build CLI
-        run: go build -o ./hasuraenv cmd/hasuraenv/hasuraenv.go
+        run: go build -o ./hasuraenv -ldflags '-X main.configPathBase=/home/runner/.hasuraenv' cmd/hasuraenv/hasuraenv.go
 
       - name: init hasuraenv
         run: ./hasuraenv init
