@@ -43,6 +43,7 @@ func TestInit(t *testing.T) {
 	}
 
 	t.Run("expect versions & current are created", func(t *testing.T) {
+		t.Parallel()
 		expected := []string{"versions", "current"}
 
 		dirEntries, err := os.ReadDir("tmp/test/.hasuraenv")
@@ -58,6 +59,7 @@ func TestInit(t *testing.T) {
 	})
 
 	t.Run("expect binary is installed", func(t *testing.T) {
+		t.Parallel()
 		b, err := os.ReadFile("tmp/test/.hasuraenv/versions/default/hasura")
 
 		assert.NoError(t, err)
@@ -65,6 +67,7 @@ func TestInit(t *testing.T) {
 	})
 
 	t.Run("expect symlink points default", func(t *testing.T) {
+		t.Parallel()
 		actual, err := os.Readlink("tmp/test/.hasuraenv/current")
 		expected := "tmp/test/.hasuraenv/versions/default"
 
