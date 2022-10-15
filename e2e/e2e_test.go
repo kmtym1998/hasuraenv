@@ -66,7 +66,7 @@ func TestInit(t *testing.T) {
 
 	t.Run("expect symlink points default", func(t *testing.T) {
 		actual, err := os.Readlink("tmp/test/.hasuraenv/current")
-		expected := "tmp/test/.hasuraenv/default"
+		expected := "tmp/test/.hasuraenv/versions/default"
 
 		assert.NoError(t, err)
 		assert.Equal(t, expected, actual)
