@@ -43,6 +43,22 @@ func hasuraenvBinPath() (p string) {
 	return
 }
 
+func currentHasuraBinPath() string {
+	pointTo, err := os.Readlink("tmp/test/.hasuraenv/current")
+	if err != nil {
+		log.Println("🚨 error", err)
+		return ""
+	}
+
+	pointToAbs, err := filepath.Abs(pointTo)
+	if err != nil {
+		log.Println("🚨 error", err)
+		return ""
+	}
+
+	return pointToAbs + "/hasura"
+}
+
 func buildTempFilePath(t *testing.T) string {
 	return fmt.Sprintf("%s/%s.txt", t.TempDir(), uuid.New().String())
 }

@@ -254,3 +254,71 @@ func TestLs(t *testing.T) {
 	assert.Equal(t, "Installed hasura cli", messages[0])
 	assert.Len(t, versions, 2)
 }
+
+func TestUse(t *testing.T) {
+	t.Cleanup(removeTestConfig)
+
+	if err := exec.Command(hasuraenvBinPath(), "init").Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := exec.Command(hasuraenvBinPath(), "install", "v2.1.0").Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	t.Run("expect switch v2.10.0", func(t *testing.T) {
+		expectedHasuraCLIVersion := "v2.10.0"
+		if err := exec.Command(hasuraenvBinPath(), "install", expectedHasuraCLIVersion).Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := exec.Command(hasuraenvBinPath(), "use", expectedHasuraCLIVersion).Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		tempFilePath := buildTempFilePath(t)
+		if err := writeOutput(tempFilePath, currentHasuraBinPath(), "version", "--skip-update-check"); err != nil {
+			t.Fatal(err)
+		}
+
+		b, err := os.ReadFile(tempFilePath)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var output map[string]string
+		if err := json.Unmarshal(b, &output); err != nil {
+			t.Fatalf("error: %+v data: %s", err, string(b))
+		}
+
+		assert.Equal(t, expectedHasuraCLIVersion, output["version"])
+	})
+
+	t.Run("expect switch v2.1.0", func(t *testing.T) {
+		expectedHasuraCLIVersion := "v2.1.0"
+		if err := exec.Command(hasuraenvBinPath(), "install", expectedHasuraCLIVersion).Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := exec.Command(hasuraenvBinPath(), "use", expectedHasuraCLIVersion).Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		tempFilePath := buildTempFilePath(t)
+		if err := writeOutput(tempFilePath, currentHasuraBinPath(), "version", "--skip-update-check"); err != nil {
+			t.Fatal(err)
+		}
+
+		b, err := os.ReadFile(tempFilePath)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var output map[string]string
+		if err := json.Unmarshal(b, &output); err != nil {
+			t.Fatalf("error: %+v data: %s", err, string(b))
+		}
+
+		assert.Equal(t, expectedHasuraCLIVersion, output["version"])
+	})
+}
