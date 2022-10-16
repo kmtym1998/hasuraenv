@@ -1,10 +1,15 @@
 # hasuraenv
 
-CLI to manage multiple hasura-cli versions.
+[![Latest release](https://img.shields.io/github/v/release/kmtym1998/hasuraenv)](https://github.com/kmtym1998/hasuraenv/releases/latest)
+[![Test](https://github.com/kmtym1998/hasuraenv/actions/workflows/test.yaml/badge.svg)](https://github.com/kmtym1998/hasuraenv/actions/workflows/test.yaml)
+[![Static Check](https://github.com/kmtym1998/hasuraenv/actions/workflows/static-check.yaml/badge.svg)](https://github.com/kmtym1998/hasuraenv/actions/workflows/static-check.yaml)
+![GitHub license](https://img.shields.io/github/license/kmtym1998/hasuraenv)
+
+Hasura CLI version manager
 
 ## Installation
 
-```sh
+```
 $ go install github.com/kmtym1998/hasuraenv/cmd/hasuraenv@latest
 $ hasuraenv init
 $ export PATH=~/.hasuraenv/current:$PATH;
@@ -12,7 +17,7 @@ $ export PATH=~/.hasuraenv/current:$PATH;
 
 ## Usage
 
-```shell
+```
 $ hasuraenv ls-remote --limit 10
 INFO Latest 10 releases
      v2.13.0-beta.1
