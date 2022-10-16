@@ -48,8 +48,8 @@ func buildTempFilePath(t *testing.T) string {
 }
 
 func writeOutput(outputPath string, commandArg ...string) error {
-	command := fmt.Sprintf("%s %s > %s 2>&1",
-		hasuraenvBinPath(), strings.Join(commandArg, " "), outputPath,
+	command := fmt.Sprintf("%s > %s 2>&1",
+		strings.Join(commandArg, " "), outputPath,
 	)
 
 	println(command)

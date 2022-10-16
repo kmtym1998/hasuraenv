@@ -27,7 +27,7 @@ func TestVersion(t *testing.T) {
 	}
 
 	tempFilePath := buildTempFilePath(t)
-	if err := writeOutput(tempFilePath, "version"); err != nil {
+	if err := writeOutput(tempFilePath, hasuraenvBinPath(), "version"); err != nil {
 		t.Fatal(err)
 	}
 
@@ -84,7 +84,7 @@ func TestLsRemote(t *testing.T) {
 		t.Parallel()
 
 		tempFilePath := buildTempFilePath(t)
-		if err := writeOutput(tempFilePath, "ls-remote"); err != nil {
+		if err := writeOutput(tempFilePath, hasuraenvBinPath(), "ls-remote"); err != nil {
 			t.Fatal(err)
 		}
 
@@ -118,7 +118,7 @@ func TestLsRemote(t *testing.T) {
 
 		limit := 10
 		tempFilePath := buildTempFilePath(t)
-		if err := writeOutput(tempFilePath, "ls-remote", "--limit", strconv.Itoa(limit)); err != nil {
+		if err := writeOutput(tempFilePath, hasuraenvBinPath(), "ls-remote", "--limit", strconv.Itoa(limit)); err != nil {
 			t.Fatal(err)
 		}
 
@@ -152,7 +152,7 @@ func TestLsRemote(t *testing.T) {
 
 		limit := 110
 		tempFilePath := buildTempFilePath(t)
-		if err := writeOutput(tempFilePath, "ls-remote", "--limit", strconv.Itoa(limit)); err != nil {
+		if err := writeOutput(tempFilePath, hasuraenvBinPath(), "ls-remote", "--limit", strconv.Itoa(limit)); err != nil {
 			t.Fatal(err)
 		}
 
