@@ -209,3 +209,48 @@ func TestInstall(t *testing.T) {
 		assert.Equal(t, "exit status 1", err.Error())
 	})
 }
+
+func TestLs(t *testing.T) {
+	t.Cleanup(removeTestConfig)
+
+	if err := exec.Command(hasuraenvBinPath(), "init").Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := exec.Command(hasuraenvBinPath(), "install", "v2.1.0").Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := exec.Command(hasuraenvBinPath(), "install", "v2.13.0").Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	tempFilePath := buildTempFilePath(t)
+	if err := writeOutput(tempFilePath, hasuraenvBinPath(), "ls"); err != nil {
+		t.Fatal(err)
+	}
+
+	b, err := os.ReadFile(tempFilePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var output map[string]string
+	if err := json.Unmarshal(b, &output); err != nil {
+		t.Fatalf("error: %+v data: %s", err, string(b))
+	}
+
+	messages := strings.Split(output["msg"], "\n")
+	versions := lo.Filter(messages, func(m string, _ int) bool {
+		sv := strings.ReplaceAll(m, " ", "")
+		sv = strings.Replace(sv, "v", "", 1)
+		if _, err := semver.Make(sv); err != nil {
+			return false
+		}
+
+		return true
+	})
+
+	assert.Equal(t, "Installed hasura cli", messages[0])
+	assert.Len(t, versions, 2)
+}
