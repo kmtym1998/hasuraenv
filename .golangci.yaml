@@ -32,7 +32,6 @@ linters:
     - nestif
     - nlreturn
     - nolintlint
-    - paralleltest
     - prealloc
     - predeclared
     - whitespace
@@ -44,6 +43,7 @@ linters:
     - scopelint
     - interfacer
     - maligned
+    - paralleltest
 
     # > You can track the evolution of the go1.18 support by following the https://github.com/golangci/golangci-lint/issues/2649.
     - structcheck
