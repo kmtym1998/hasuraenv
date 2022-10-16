@@ -101,3 +101,10 @@ func jsonEq(t assert.TestingT, expected, actual []byte, ignoreKeys ...string) bo
 
 	return assert.Equal(t, expectedJSONAsAny, actualJSONAsAny)
 }
+
+func removeTestConfig() {
+	err := os.RemoveAll("tmp/test/.hasuraenv")
+	if err != nil {
+		log.Fatal(err)
+	}
+}

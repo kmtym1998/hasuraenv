@@ -40,14 +40,13 @@ func TestVersion(t *testing.T) {
 }
 
 func TestInit(t *testing.T) {
-	t.Parallel()
+	t.Cleanup(removeTestConfig)
 
 	if err := exec.Command(hasuraenvBinPath(), "init").Run(); err != nil {
 		t.Fatal(err)
 	}
 
 	t.Run("expect versions & current are created", func(t *testing.T) {
-		t.Parallel()
 		expected := []string{"versions", "current"}
 
 		dirEntries, err := os.ReadDir("tmp/test/.hasuraenv")
@@ -63,7 +62,6 @@ func TestInit(t *testing.T) {
 	})
 
 	t.Run("expect binary is installed", func(t *testing.T) {
-		t.Parallel()
 		b, err := os.ReadFile("tmp/test/.hasuraenv/versions/default/hasura")
 
 		assert.NoError(t, err)
@@ -71,7 +69,6 @@ func TestInit(t *testing.T) {
 	})
 
 	t.Run("expect symlink points default", func(t *testing.T) {
-		t.Parallel()
 		actual, err := os.Readlink("tmp/test/.hasuraenv/current")
 		expected := "tmp/test/.hasuraenv/versions/default"
 
@@ -182,5 +179,33 @@ func TestLsRemote(t *testing.T) {
 
 		assert.Equal(t, "Latest "+strconv.Itoa(limit)+" releases", messages[0])
 		assert.Len(t, versions, limit)
+	})
+}
+
+func TestInstall(t *testing.T) {
+	t.Cleanup(removeTestConfig)
+
+	if err := exec.Command(hasuraenvBinPath(), "init").Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	t.Run("expect v2.13.0 installed", func(t *testing.T) {
+		if err := exec.Command(hasuraenvBinPath(), "install", "v2.13.0").Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		b, err := os.ReadFile("tmp/test/.hasuraenv/versions/v2.13.0/hasura")
+
+		assert.NoError(t, err)
+		assert.NotNil(t, b)
+	})
+
+	t.Run("expect an error when specifying non-exist version", func(t *testing.T) {
+		err := exec.Command(hasuraenvBinPath(), "install", "v2.0.99").Run()
+		if err == nil {
+			t.Fatal("v2.0.99 doesn't exist")
+		}
+
+		assert.Equal(t, "exit status 1", err.Error())
 	})
 }
