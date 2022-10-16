@@ -14,6 +14,9 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	// NOTE: https://hasura.io/docs/latest/guides/telemetry/#disable-cli-telemetry
+	os.Setenv("HASURA_GRAPHQL_ENABLE_TELEMETRY", "false")
+
 	code := m.Run()
 	os.Exit(code)
 }
@@ -262,12 +265,14 @@ func TestUse(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err := exec.Command(hasuraenvBinPath(), "install", "v2.1.0").Run(); err != nil {
+	// FIXME: telemetry notice on GitHub Actions
+	// NOTE: https://github.com/kmtym1998/hasuraenv/actions/runs/3259113829/jobs/5351709250
+	if err := exec.Command(currentHasuraBinPath(), "version", "--skip-update-check").Run(); err != nil {
 		t.Fatal(err)
 	}
 
-	t.Run("expect switch v2.10.0", func(t *testing.T) {
-		expectedHasuraCLIVersion := "v2.10.0"
+	t.Run("expect switch v2.1.0", func(t *testing.T) {
+		expectedHasuraCLIVersion := "v2.1.0"
 		if err := exec.Command(hasuraenvBinPath(), "install", expectedHasuraCLIVersion).Run(); err != nil {
 			t.Fatal(err)
 		}
@@ -294,8 +299,8 @@ func TestUse(t *testing.T) {
 		assert.Equal(t, expectedHasuraCLIVersion, output["version"])
 	})
 
-	t.Run("expect switch v2.1.0", func(t *testing.T) {
-		expectedHasuraCLIVersion := "v2.1.0"
+	t.Run("expect switch v2.13.0", func(t *testing.T) {
+		expectedHasuraCLIVersion := "v2.13.0"
 		if err := exec.Command(hasuraenvBinPath(), "install", expectedHasuraCLIVersion).Run(); err != nil {
 			t.Fatal(err)
 		}

@@ -47,12 +47,14 @@ func currentHasuraBinPath() string {
 	pointTo, err := os.Readlink("tmp/test/.hasuraenv/current")
 	if err != nil {
 		log.Println("🚨 error", err)
+
 		return ""
 	}
 
 	pointToAbs, err := filepath.Abs(pointTo)
 	if err != nil {
 		log.Println("🚨 error", err)
+
 		return ""
 	}
 
