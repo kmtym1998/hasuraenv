@@ -14,6 +14,9 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	// NOTE: https://hasura.io/docs/latest/guides/telemetry/#disable-cli-telemetry
+	os.Setenv("HASURA_GRAPHQL_ENABLE_TELEMETRY", "false")
+
 	code := m.Run()
 	os.Exit(code)
 }
@@ -253,4 +256,74 @@ func TestLs(t *testing.T) {
 
 	assert.Equal(t, "Installed hasura cli", messages[0])
 	assert.Len(t, versions, 2)
+}
+
+func TestUse(t *testing.T) {
+	t.Cleanup(removeTestConfig)
+
+	if err := exec.Command(hasuraenvBinPath(), "init").Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	// FIXME: telemetry notice on GitHub Actions
+	// NOTE: https://github.com/kmtym1998/hasuraenv/actions/runs/3259113829/jobs/5351709250
+	if err := exec.Command(currentHasuraBinPath(), "version", "--skip-update-check").Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	t.Run("expect switch v2.1.0", func(t *testing.T) {
+		expectedHasuraCLIVersion := "v2.1.0"
+		if err := exec.Command(hasuraenvBinPath(), "install", expectedHasuraCLIVersion).Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := exec.Command(hasuraenvBinPath(), "use", expectedHasuraCLIVersion).Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		tempFilePath := buildTempFilePath(t)
+		if err := writeOutput(tempFilePath, currentHasuraBinPath(), "version", "--skip-update-check"); err != nil {
+			t.Fatal(err)
+		}
+
+		b, err := os.ReadFile(tempFilePath)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var output map[string]string
+		if err := json.Unmarshal(b, &output); err != nil {
+			t.Fatalf("error: %+v data: %s", err, string(b))
+		}
+
+		assert.Equal(t, expectedHasuraCLIVersion, output["version"])
+	})
+
+	t.Run("expect switch v2.13.0", func(t *testing.T) {
+		expectedHasuraCLIVersion := "v2.13.0"
+		if err := exec.Command(hasuraenvBinPath(), "install", expectedHasuraCLIVersion).Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := exec.Command(hasuraenvBinPath(), "use", expectedHasuraCLIVersion).Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		tempFilePath := buildTempFilePath(t)
+		if err := writeOutput(tempFilePath, currentHasuraBinPath(), "version", "--skip-update-check"); err != nil {
+			t.Fatal(err)
+		}
+
+		b, err := os.ReadFile(tempFilePath)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var output map[string]string
+		if err := json.Unmarshal(b, &output); err != nil {
+			t.Fatalf("error: %+v data: %s", err, string(b))
+		}
+
+		assert.Equal(t, expectedHasuraCLIVersion, output["version"])
+	})
 }
