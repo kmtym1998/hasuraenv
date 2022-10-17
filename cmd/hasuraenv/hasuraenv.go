@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	version        string = "v0.0.2"
+	version        string = "v0.1.0"
 	configPathBase string = "~/.hasuraenv"
 )
 
