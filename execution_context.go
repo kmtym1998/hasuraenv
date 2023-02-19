@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
-	"github.com/gofrs/uuid"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"golang.org/x/term"
@@ -81,14 +81,7 @@ func (ec *ExecutionContext) Prepare() error {
 
 	// generate an execution id
 	if ec.ID == "" {
-		id := "00000000-0000-0000-0000-000000000000"
-		u, err := uuid.NewV4()
-		if err == nil {
-			id = u.String()
-		} else {
-			ec.Logger.Debugf("generating uuid for execution ID failed, %v", err)
-		}
-		ec.ID = id
+		ec.ID = uuid.New().String()
 		ec.Logger.Debugf("execution id: %v", ec.ID)
 	}
 
