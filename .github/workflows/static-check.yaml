@@ -6,6 +6,8 @@ on:
     types:
       - opened
       - synchronize
+env:
+  GOROOT: /usr/local/go
 
 jobs:
   format-check:
