@@ -21,7 +21,7 @@ jobs:
       # https://github.com/golangci/golangci-lint/issues/3107
       - name: SET GOROOT
         run: |
-          echo "GOROOT=${{ go env GOROOT }}" >> $GITHUB_ENV
+          echo "GOROOT=$(go env GOROOT)" >> $GITHUB_ENV
 
       - name: Minimize Module
         run: |-
