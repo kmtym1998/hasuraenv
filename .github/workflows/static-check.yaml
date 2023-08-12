@@ -18,11 +18,6 @@ jobs:
         with:
           go-version: 1.21
 
-      # https://github.com/golangci/golangci-lint/issues/3107
-      - name: SET GOROOT
-        run: |
-          echo "GOROOT=$(go env GOROOT)" >> $GITHUB_ENV
-
       - name: Minimize Module
         run: |-
           go mod tidy
