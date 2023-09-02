@@ -16,12 +16,9 @@ var (
 
 // main is the entrypoint function
 func main() {
-	homeDir := os.Getenv("HOME")
-	if homeDir == "" {
-		log.Fatal("HOME environment variable is not set")
+	if configPathBase == "" {
+		configPathBase = os.Getenv("HOME") + "/.hasuraenv"
 	}
-
-	configPathBase = homeDir + "/.hasuraenv"
 
 	bo := cli.NewBuildOptions(version, configPathBase)
 	ec := cli.NewExecutionContext(bo)
